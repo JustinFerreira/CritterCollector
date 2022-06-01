@@ -1,0 +1,2 @@
+# CritterCollector
+Solo Project
