@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     private BoxCollider2D boxCollider;
     public Animator animator;
+    private RaycastHit2D hit;
 
     //Alternate Sprites
     public Sprite SideView;
@@ -88,8 +89,24 @@ public class Player : MonoBehaviour
             animator.SetFloat("Speed", 0);
         }
 
-        //Make This thing move
-        transform.Translate(moveDelta * Time.deltaTime);
+        //Make sure we can move in this direction by casting a box there first. if box returns null, we're free to move
+        hit = Physics2D.BoxCast(transform.position, boxCollider.size, 0, new Vector2(0, moveDelta.y), Mathf.Abs(moveDelta.y * Time.deltaTime), LayerMask.GetMask("Entities", "Blocking"));
+        if(hit.collider == null)
+        {
+            //Make This thing move
+            transform.Translate(0, moveDelta.y * Time.deltaTime, 0);
+        }
+
+        //Make sure we can move in this direction by casting a box there first. if box returns null, we're free to move
+        hit = Physics2D.BoxCast(transform.position, boxCollider.size, 0, new Vector2(0, moveDelta.x), Mathf.Abs(moveDelta.x * Time.deltaTime), LayerMask.GetMask("Entities", "Blocking"));
+        if (hit.collider == null)
+        {
+            //Make This thing move
+            transform.Translate(moveDelta.x * Time.deltaTime, 0, 0);
+        }
+
+
+
 
     }
 }
